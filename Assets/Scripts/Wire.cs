@@ -6,6 +6,7 @@ public class Wire : MonoBehaviour
 {
     public bool state;
     private LineRenderer _lineRenderer;
+    private GameObject _endNode;
     public bool Connected { get; private set; }
     private void Awake()
     {
@@ -26,7 +27,11 @@ public class Wire : MonoBehaviour
     }
     private void KeepFollowingTheMouse()
     {
-        if (Connected) return;
+        if (Connected)
+        {
+            _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, _endNode.transform.position);
+            return;
+        }
         _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, GetAnchorPoint());
     }
     private void AddAnchorPoint(Vector3 point)
@@ -45,6 +50,7 @@ public class Wire : MonoBehaviour
         {
             _mouseHoverObject.GetComponent<Node>().ConnectWire(this);
             Connected = true;
+            _endNode = _mouseHoverObject;
             return _mouseHoverObject.transform.position;
         }
         return MouseManager.instance.GetPosition();
