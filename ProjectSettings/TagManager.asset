@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Gate
   - Node
+  - PowerNode
+  - InputNode
   layers:
   - Default
   - TransparentFX

@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Wire : MonoBehaviour
 {
-    public bool State;
+    public bool state;
     private LineRenderer _lineRenderer;
-    public bool _connected;
+    public bool Connected { get; private set; }
     private void Awake()
     {
         _lineRenderer = GetComponent<LineRenderer>();
@@ -15,15 +15,19 @@ public class Wire : MonoBehaviour
     void Update()
     {
         KeepFollowingTheMouse();
-        if (Input.GetMouseButtonUp(0) && !_connected)
+        if (Input.GetMouseButtonDown(0) && !Connected)
         {
             AddAnchorPoint(GetAnchorPoint());
+        }
+        if ((Input.GetMouseButtonDown(1) && !Connected) || Input.GetKeyDown(KeyCode.F))
+        {
+            RemoveWire();
         }
     }
     private void KeepFollowingTheMouse()
     {
-        if (_connected) return;
-        _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, MouseManager.instance.GetPosition());
+        if (Connected) return;
+        _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, GetAnchorPoint());
     }
     private void AddAnchorPoint(Vector3 point)
     {
@@ -31,24 +35,34 @@ public class Wire : MonoBehaviour
         _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, point);
     }
 
-    private Vector3 GetAnchorPoint()
+    private Vector2 GetAnchorPoint()
     {
         var _mouseHoverObject = MouseManager.instance.HoverOverGameObject();
 
         if (!_mouseHoverObject) return MouseManager.instance.GetPosition();
 
-        if (_mouseHoverObject.CompareTag("Node"))
+        if (_mouseHoverObject.CompareTag("InputNode"))
         {
             _mouseHoverObject.GetComponent<Node>().ConnectWire(this);
-            _connected = true;
+            Connected = true;
             return _mouseHoverObject.transform.position;
         }
         return MouseManager.instance.GetPosition();
     }
 
-    public void Instantiate(Vector3 startPos)
+    public void Instantiate(Vector3 startPos, bool _state)
     {
+        state = _state;
         _lineRenderer.positionCount = 2;
         _lineRenderer.SetPosition(0, startPos);
+    }
+    private void OnDestroy()
+    {
+        state = false;
+    }
+
+    public void RemoveWire()
+    {
+        Destroy(gameObject);
     }
 }

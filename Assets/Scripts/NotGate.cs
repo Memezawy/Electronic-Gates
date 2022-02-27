@@ -16,7 +16,7 @@ namespace Gates
         {
             if (_inputIndicator.connectedWire != null)
             {
-                input = _inputIndicator.connectedWire.State;
+                input = _inputIndicator.connectedWire.state;
                 output = !input;
             }
             else

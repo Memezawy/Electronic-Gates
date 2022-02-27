@@ -18,7 +18,7 @@ public class MouseManager : MonoBehaviour
     }
 
 
-    public Vector3 GetPosition()
+    public Vector2 GetPosition()
     {
         var mousePostion = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mousePostion.z = 1;

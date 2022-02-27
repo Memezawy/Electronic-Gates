@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Gates
 {
-    public class AndGate : MonoBehaviour
+    public class OrGate : MonoBehaviour
     {
 
         public bool input1;
@@ -18,7 +18,7 @@ namespace Gates
         {
             input1 = _inputIndicator1.connectedWire != null ? _inputIndicator1.connectedWire.state : false;
             input2 = _inputIndicator2.connectedWire != null ? _inputIndicator2.connectedWire.state : false;
-            output = input1 && input2;
+            output = input1 || input2;
             UpdateIndicators();
         }
 
