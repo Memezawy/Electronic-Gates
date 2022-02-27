@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7979130312181277311}
   - component: {fileID: 2237168761657607060}
   m_Layer: 0
-  m_Name: Input
+  m_Name: Node
   m_TagString: Node
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -98,6 +98,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
+  isOutput: 0
+  connectedWire: {fileID: 0}
 --- !u!58 &2237168761657607060
 CircleCollider2D:
   m_ObjectHideFlags: 0

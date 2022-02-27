@@ -25,6 +25,11 @@ public class Node : MonoBehaviour
         {
             connectedWire.State = state;
         }
+        else if (!isOutput && connectedWire != null)
+        {
+            state = connectedWire.State;
+        }
+
     }
     private void OnMouseDown()
     {
