@@ -21,6 +21,10 @@ namespace Gates
             output = input1 || input2;
             UpdateIndicators();
         }
+        private void OnMouseDrag()
+        {
+            transform.position = MouseManager.instance.GetPosition();
+        }
 
         private void UpdateIndicators()
         {

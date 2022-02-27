@@ -27,10 +27,16 @@ namespace Gates
             UpdateIndicators();
         }
 
+        private void OnMouseDrag()
+        {
+            transform.position = MouseManager.instance.GetPosition();
+        }
+
         private void UpdateIndicators()
         {
             _inputIndicator.state = input;
             _outputIndicator.state = output;
         }
+
     }
 }
