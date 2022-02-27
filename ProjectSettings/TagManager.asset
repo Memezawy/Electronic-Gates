@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Gate
+  - Node
   layers:
   - Default
   - TransparentFX
@@ -44,4 +45,7 @@ TagManager:
     locked: 0
   - name: Gates
     uniqueID: 2773394341
+    locked: 0
+  - name: ForeGround
+    uniqueID: 3237776497
     locked: 0

@@ -5,19 +5,32 @@ namespace Gates
     public class NotGate : MonoBehaviour
     {
 
-        [Header("Input")]
-
         public bool input;
-        public bool Output => !input; // returns the invese of the input.
+        public bool output; // returns the invese of the input.
 
         [Header("Indicators")]
-        [SerializeField] private Indicator _inputIndicator;
-        [SerializeField] private Indicator _outputIndicator;
+        [SerializeField] private Node _inputIndicator;
+        [SerializeField] private Node _outputIndicator;
 
         private void Update()
         {
+            if (_inputIndicator.connectedWire != null)
+            {
+                input = _inputIndicator.connectedWire.State;
+                output = !input;
+            }
+            else
+            {
+                input = false;
+                output = false;
+            }
+            UpdateIndicators();
+        }
+
+        private void UpdateIndicators()
+        {
             _inputIndicator.state = input;
-            _outputIndicator.state = Output;
+            _outputIndicator.state = output;
         }
     }
 }
