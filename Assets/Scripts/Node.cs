@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Node : MonoBehaviour
@@ -8,6 +6,7 @@ public class Node : MonoBehaviour
     public bool isOutput;
     public bool isPower;
     private SpriteRenderer _spriteRenderer;
+    private TMPro.TMP_Text _powerText;
     public static Color OnColor = Color.green;
     public static Color OffColor = Color.red;
 
@@ -17,6 +16,7 @@ public class Node : MonoBehaviour
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        _powerText = GetComponentInChildren<TMPro.TMP_Text>();
     }
 
     private void Update()
@@ -30,14 +30,15 @@ public class Node : MonoBehaviour
         {
             state = connectedWire.state;
         }
+        _powerText.text = state ? "1" : "0";
 
     }
     private void OnMouseDown()
     {
         if (isOutput)
         {
-            var wire = Instantiate(GameAssets.i.wire, transform.position, Quaternion.identity, transform).GetComponent<Wire>();
-            wire.Instantiate(transform.position, state);
+            Wire wire = Instantiate(GameAssets.i.wire, transform.position, Quaternion.identity, transform).GetComponent<Wire>();
+            wire.Instantiate(transform, state);
             ConnectWire(wire);
         }
     }
