@@ -1,23 +1,24 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets.Scripts
+namespace Gates.Nodes
 {
-    public class PowerNode : Node
+    public class PowerNode : OutputNode
     {
         internal override void Awake()
         {
             base.Awake();
-            state = isOutput = isPower = true;
+            state = true;
         }
 
         internal override void Update()
         {
-            base.Update();
+            UpdateAllConnectedWires();
+            UpdateVisual();
         }
-        public override void TriggerNode()
+        public virtual void TriggerNode()
         {
-            base.TriggerNode();
+            state = !state;
             foreach (var w in _wires)
             {
                 w?.Setstate(state);
@@ -27,14 +28,6 @@ namespace Assets.Scripts
         internal override void OnMouseOver()
         {
             base.OnMouseOver();
-            if (Input.GetMouseButtonDown(1))
-            {
-                foreach (var w in _wires)
-                {
-                    w.RemoveWire();
-                }
-                _wires.Clear();
-            }
         }
     }
 }

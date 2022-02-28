@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Gates.Nodes;
+using System.Collections;
 using UnityEngine;
 
 namespace Gates
@@ -24,9 +25,10 @@ namespace Gates
         {
             foreach (var i in _inputIndicators)
             {
+                //if (i.connectedWire == null) continue;
                 i?.connectedWire?.RemoveWire();
             }
-            _outputIndicator.connectedWire?.RemoveWire();
+            _outputIndicator?.connectedWire?.RemoveWire();
         }
     }
 }

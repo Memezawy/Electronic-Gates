@@ -1,3 +1,4 @@
+using Gates.Nodes;
 using UnityEngine;
 
 public class Wire : MonoBehaviour
@@ -79,11 +80,8 @@ public class Wire : MonoBehaviour
     }
     public void RemoveWire()
     {
-        Destroy(gameObject);
-    }
-    private void OnDestroy()
-    {
         Setstate(false);
+        Destroy(gameObject);
     }
     private void UpdateLineColor()
     {
