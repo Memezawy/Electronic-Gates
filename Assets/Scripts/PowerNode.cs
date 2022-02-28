@@ -19,10 +19,6 @@ namespace Gates.Nodes
         public virtual void TriggerNode()
         {
             state = !state;
-            foreach (var w in _wires)
-            {
-                w?.Setstate(state);
-            }
         }
 
         internal override void OnMouseOver()

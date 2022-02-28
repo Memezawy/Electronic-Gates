@@ -60,6 +60,7 @@ namespace Gates.Nodes
         {
             if (wire == connectedWire)
             {
+                state = false;
                 connectedWire = null;
                 wire.RemoveWire();
             }
