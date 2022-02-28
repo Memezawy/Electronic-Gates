@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Wire : MonoBehaviour
 {
-    public bool state;
+    private bool state;
     private LineRenderer _lineRenderer;
     private Transform _endNode;
     private Transform _startNode;
@@ -12,6 +10,7 @@ public class Wire : MonoBehaviour
     private void Awake()
     {
         _lineRenderer = GetComponent<LineRenderer>();
+        WiresManager.RemoveWiresEvent += RemoveWire;
     }
 
     void Update()
@@ -25,6 +24,16 @@ public class Wire : MonoBehaviour
         {
             RemoveWire();
         }
+    }
+    public bool Getstate()
+    {
+        return state;
+    }
+
+    public void Setstate(bool value)
+    {
+        UpdateLineColor();
+        state = value;
     }
     private void KeepFollowingTheMouse()
     {
@@ -44,9 +53,12 @@ public class Wire : MonoBehaviour
 
     private Vector2 GetAnchorPoint()
     {
-        var _mouseHoverObject = MouseManager.instance.HoverOverGameObject();
+        GameObject _mouseHoverObject = MouseManager.instance.HoverOverGameObject();
 
-        if (!_mouseHoverObject) return MouseManager.instance.GetPosition();
+        if (!_mouseHoverObject)
+        {
+            return MouseManager.instance.GetPosition();
+        }
 
         if (_mouseHoverObject.CompareTag("InputNode"))
         {
@@ -60,18 +72,21 @@ public class Wire : MonoBehaviour
 
     public void Instantiate(Transform startPos, bool _state)
     {
-        state = _state;
+        Setstate(_state);
         _startNode = startPos;
         _lineRenderer.positionCount = 1;
         _lineRenderer.SetPosition(0, startPos.position);
     }
-    private void OnDestroy()
-    {
-        state = false;
-    }
-
     public void RemoveWire()
     {
         Destroy(gameObject);
+    }
+    private void OnDestroy()
+    {
+        Setstate(false);
+    }
+    private void UpdateLineColor()
+    {
+        _lineRenderer.startColor = _lineRenderer.endColor = Getstate() ? Color.green : Color.red;
     }
 }

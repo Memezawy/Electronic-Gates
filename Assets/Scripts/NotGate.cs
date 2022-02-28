@@ -2,21 +2,17 @@ using UnityEngine;
 
 namespace Gates
 {
-    public class NotGate : MonoBehaviour
+    public class NotGate : BaseGate
     {
 
         public bool input;
         public bool output; // returns the invese of the input.
 
-        [Header("Indicators")]
-        [SerializeField] private Node _inputIndicator;
-        [SerializeField] private Node _outputIndicator;
-
         private void Update()
         {
-            if (_inputIndicator.connectedWire != null)
+            if (_inputIndicators[0].connectedWire != null)
             {
-                input = _inputIndicator.connectedWire.state;
+                input = _inputIndicators[0].connectedWire.Getstate();
                 output = !input;
             }
             else
@@ -27,16 +23,10 @@ namespace Gates
             UpdateIndicators();
         }
 
-        private void OnMouseDrag()
-        {
-            transform.position = MouseManager.instance.GetPosition();
-        }
-
         private void UpdateIndicators()
         {
-            _inputIndicator.state = input;
+            _inputIndicators[0].state = input;
             _outputIndicator.state = output;
         }
-
     }
 }

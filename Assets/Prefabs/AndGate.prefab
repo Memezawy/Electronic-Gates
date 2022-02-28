@@ -46,12 +46,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c7e0450e8183c54aa1f078956aaabec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _inputIndicators:
+  - {fileID: 2984453769581587680}
+  - {fileID: 2984453771170684171}
+  _outputIndicator: {fileID: 2984453769151026429}
   input1: 0
   input2: 0
   output: 0
-  _inputIndicator1: {fileID: 2984453769581587680}
-  _inputIndicator2: {fileID: 2984453771170684171}
-  _outputIndicator: {fileID: 2984453769151026429}
 --- !u!61 &1523284609
 BoxCollider2D:
   m_ObjectHideFlags: 0

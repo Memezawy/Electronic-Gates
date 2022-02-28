@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Node : MonoBehaviour
 {
@@ -9,9 +10,10 @@ public class Node : MonoBehaviour
     private TMPro.TMP_Text _powerText;
     public static Color OnColor = Color.green;
     public static Color OffColor = Color.red;
+    private List<Wire> _wires = new List<Wire>(); // Output and Input Nodes
 
     [HideInInspector]
-    public Wire connectedWire;
+    public Wire connectedWire; // Has to Do with Normal Nodes.
 
     private void Awake()
     {
@@ -24,22 +26,31 @@ public class Node : MonoBehaviour
         _spriteRenderer.color = state ? OnColor : OffColor;
         if (isOutput && connectedWire != null)
         {
-            connectedWire.state = state;
+            connectedWire.Setstate(state);
         }
         else if (!isOutput && connectedWire != null)
         {
-            state = connectedWire.state;
+            state = connectedWire.Getstate();
         }
         _powerText.text = state ? "1" : "0";
 
     }
-    private void OnMouseDown()
+    private void OnMouseOver()
     {
-        if (isOutput)
+        if (Input.GetMouseButtonDown(0) && isOutput)
         {
             Wire wire = Instantiate(GameAssets.i.wire, transform.position, Quaternion.identity, transform).GetComponent<Wire>();
             wire.Instantiate(transform, state);
             ConnectWire(wire);
+            _wires.Add(wire);
+        }
+        else if (Input.GetMouseButtonDown(1))
+        {
+            connectedWire?.RemoveWire();
+            foreach (var w in _wires)
+            {
+                w?.RemoveWire();
+            }
         }
     }
 
@@ -53,11 +64,11 @@ public class Node : MonoBehaviour
 
         if (isOutput)
         {
-            wire.state = state;
+            wire.Setstate(state);
         }
         else
         {
-            state = wire.state;
+            state = wire.Getstate();
         }
         connectedWire = wire;
     }

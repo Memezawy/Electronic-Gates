@@ -161,10 +161,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55f257343c49f4e4fbc2b7b89e9d6e3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _inputIndicators:
+  - {fileID: 8194182546900701516}
+  _outputIndicator: {fileID: 4832240700210226593}
   input: 0
   output: 0
-  _inputIndicator: {fileID: 8194182546900701516}
-  _outputIndicator: {fileID: 4832240700210226593}
 --- !u!61 &643817491
 BoxCollider2D:
   m_ObjectHideFlags: 0

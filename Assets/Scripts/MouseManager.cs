@@ -12,11 +12,6 @@ public class MouseManager : MonoBehaviour
             instance = this;
         }
     }
-    private void Update()
-    {
-        HoverOverGameObject();
-    }
-
 
     public Vector2 GetPosition()
     {
@@ -24,7 +19,6 @@ public class MouseManager : MonoBehaviour
         mousePostion.z = 10f;
         mousePostion = Camera.main.ScreenToWorldPoint(mousePostion);
         mousePostion.z = 0f;
-        Debug.Log(mousePostion);
         return mousePostion;
     }
 
