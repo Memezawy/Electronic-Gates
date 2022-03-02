@@ -13,7 +13,7 @@ namespace Gates.Nodes
 
         internal override void Update()
         {
-            base.Update();
+            UpdateVisual();
             UpdateAllConnectedWires();
         }
 

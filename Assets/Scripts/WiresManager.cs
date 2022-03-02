@@ -7,6 +7,14 @@ public class WiresManager : MonoBehaviour
 {
     public static event Action RemoveWiresEvent;
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            RemoveAllWires();
+        }
+    }
+
     public void RemoveAllWires()
     {
         RemoveWiresEvent?.Invoke();

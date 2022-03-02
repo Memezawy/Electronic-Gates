@@ -6,14 +6,12 @@ public class Wire : MonoBehaviour
 {
     private bool state;
     private LineRenderer _lineRenderer;
-    private EdgeCollider2D _edgeCollider;
     private Transform _endNode;
     private Transform _startNode;
     public bool Connected { get; private set; }
     private void Awake()
     {
         _lineRenderer = GetComponent<LineRenderer>();
-        _edgeCollider = GetComponent<EdgeCollider2D>();
         WiresManager.RemoveWiresEvent += RemoveWire;
     }
 
@@ -29,7 +27,7 @@ public class Wire : MonoBehaviour
             AddAnchorPoint(_lineRenderer.GetPosition(_lineRenderer.positionCount - 1));
 
         }
-        else if ((Input.GetMouseButtonDown(1) && !Connected) || Input.GetKeyDown(KeyCode.F))
+        else if ((Input.GetMouseButtonDown(1) && !Connected))
         {
             RemoveWire();
         }
