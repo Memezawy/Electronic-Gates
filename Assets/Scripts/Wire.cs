@@ -1,16 +1,19 @@
 using Gates.Nodes;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Wire : MonoBehaviour
 {
     private bool state;
     private LineRenderer _lineRenderer;
+    private EdgeCollider2D _edgeCollider;
     private Transform _endNode;
     private Transform _startNode;
     public bool Connected { get; private set; }
     private void Awake()
     {
         _lineRenderer = GetComponent<LineRenderer>();
+        _edgeCollider = GetComponent<EdgeCollider2D>();
         WiresManager.RemoveWiresEvent += RemoveWire;
     }
 
@@ -21,7 +24,12 @@ public class Wire : MonoBehaviour
         {
             AddAnchorPoint(GetAnchorPoint());
         }
-        if ((Input.GetMouseButtonDown(1) && !Connected) || Input.GetKeyDown(KeyCode.F))
+        else if (Input.GetMouseButtonUp(0) && !Connected)
+        {
+            AddAnchorPoint(_lineRenderer.GetPosition(_lineRenderer.positionCount - 1));
+
+        }
+        else if ((Input.GetMouseButtonDown(1) && !Connected) || Input.GetKeyDown(KeyCode.F))
         {
             RemoveWire();
         }
@@ -85,6 +93,29 @@ public class Wire : MonoBehaviour
     }
     private void UpdateLineColor()
     {
+        if (_lineRenderer == null) return;
         _lineRenderer.startColor = _lineRenderer.endColor = Getstate() ? Color.green : Color.red;
     }
+
+    private void OnDisable()
+    {
+        WiresManager.RemoveWiresEvent -= RemoveWire;
+    }
+
+    //private void UpdateCollider()
+    //{
+    //    var anchorPoints = new Vector3[_lineRenderer.positionCount];
+    //    _lineRenderer.GetPositions(anchorPoints);
+    //    var anchorPointsList = new List<Vector2>();
+    //    anchorPointsList.Capacity = _lineRenderer.positionCount;
+    //    for (int i = _lineRenderer.positionCount - 1; i >= 0; i--)
+    //    {
+    //        var v1 = _lineRenderer.GetPosition(i - 1);
+    //        var v2 = _lineRenderer.GetPosition(i);
+    //        Debug.Log($"V1 = {v1}, V2 = {v2}, Lr Count = {_lineRenderer.positionCount}, I = {i}");
+
+    //        var points = v1.x - v2.x;
+    //    }
+    //    _edgeCollider.SetPoints(anchorPointsList);
+    //}
 }
