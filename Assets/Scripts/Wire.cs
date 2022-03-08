@@ -6,12 +6,14 @@ public class Wire : MonoBehaviour
 {
     private bool state;
     private LineRenderer _lineRenderer;
+    private EdgeCollider2D _edgeColider;
     private Transform _endNode;
     private Transform _startNode;
     public bool Connected { get; private set; }
     private void Awake()
     {
         _lineRenderer = GetComponent<LineRenderer>();
+        _edgeColider = GetComponent<EdgeCollider2D>();
         WiresManager.RemoveWiresEvent += RemoveWire;
     }
 
@@ -30,6 +32,11 @@ public class Wire : MonoBehaviour
         else if ((Input.GetMouseButtonDown(1) && !Connected))
         {
             RemoveWire();
+        }
+
+        if (Input.GetMouseButtonDown(2))
+        {
+            UpdateEdgeColider();
         }
     }
     public bool Getstate()
@@ -92,7 +99,7 @@ public class Wire : MonoBehaviour
     private void UpdateLineColor()
     {
         if (_lineRenderer == null) return;
-        _lineRenderer.startColor = _lineRenderer.endColor = Getstate() ? Color.green : Color.red;
+        _lineRenderer.startColor = _lineRenderer.endColor = Getstate() ? Color.red : Color.red;
     }
 
     private void OnDisable()
@@ -100,20 +107,18 @@ public class Wire : MonoBehaviour
         WiresManager.RemoveWiresEvent -= RemoveWire;
     }
 
-    //private void UpdateCollider()
-    //{
-    //    var anchorPoints = new Vector3[_lineRenderer.positionCount];
-    //    _lineRenderer.GetPositions(anchorPoints);
-    //    var anchorPointsList = new List<Vector2>();
-    //    anchorPointsList.Capacity = _lineRenderer.positionCount;
-    //    for (int i = _lineRenderer.positionCount - 1; i >= 0; i--)
-    //    {
-    //        var v1 = _lineRenderer.GetPosition(i - 1);
-    //        var v2 = _lineRenderer.GetPosition(i);
-    //        Debug.Log($"V1 = {v1}, V2 = {v2}, Lr Count = {_lineRenderer.positionCount}, I = {i}");
-
-    //        var points = v1.x - v2.x;
-    //    }
-    //    _edgeCollider.SetPoints(anchorPointsList);
-    //}
+    private void UpdateEdgeColider()
+    {
+        var offX = -_lineRenderer.GetPosition(0).x;
+        var offY = -_lineRenderer.GetPosition(0).y;
+        var points = new Vector2[_edgeColider.pointCount];
+        points[0] = Vector2.zero;
+        for (int i = 1; i < _lineRenderer.positionCount; i++)
+        {
+            Debug.Log("Entered");
+            Debug.Log(_lineRenderer.GetPosition(i));
+            points[i] = new Vector2(offX + _lineRenderer.GetPosition(i).x, offY + _lineRenderer.GetPosition(i).y);
+        }
+        _edgeColider.points = points;
+    }
 }
