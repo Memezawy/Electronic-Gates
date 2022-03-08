@@ -27,17 +27,12 @@ public class Wire : MonoBehaviour
         else if (Input.GetMouseButtonUp(0) && !Connected)
         {
             AddAnchorPoint(_lineRenderer.GetPosition(_lineRenderer.positionCount - 1));
-
         }
         else if ((Input.GetMouseButtonDown(1) && !Connected))
         {
             RemoveWire();
         }
-
-        if (Input.GetMouseButtonDown(2))
-        {
-            UpdateEdgeColider();
-        }
+        UpdateEdgeColider();
     }
     public bool Getstate()
     {
@@ -109,9 +104,11 @@ public class Wire : MonoBehaviour
 
     private void UpdateEdgeColider()
     {
+        _edgeColider.enabled = Connected;
+
         var offX = -_lineRenderer.GetPosition(0).x;
         var offY = -_lineRenderer.GetPosition(0).y;
-        var points = new Vector2[_edgeColider.pointCount];
+        var points = new Vector2[_lineRenderer.positionCount];
         points[0] = Vector2.zero;
         for (int i = 1; i < _lineRenderer.positionCount; i++)
         {
