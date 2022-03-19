@@ -118,7 +118,7 @@ public class Wire : MonoBehaviour
     {
         if (Input.GetMouseButtonUp(2))
         {
-            AddAnchorPoint(MouseManager.instance.GetPosition());
+            RemoveWire();
         }
     }
     private void OnDisable()
@@ -178,4 +178,6 @@ public class Wire : MonoBehaviour
     {
         return _lineRenderer.GetPosition(index);
     }
+
+
 }
