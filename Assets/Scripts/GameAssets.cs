@@ -23,6 +23,7 @@ public class GameAssets : MonoBehaviour
 
 
     public GameObject wire;
+    public GameObject wireAnchor;
     public GameObject notGate;
     public GameObject andGate;
     public GameObject orGate;

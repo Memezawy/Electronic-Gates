@@ -1,5 +1,4 @@
 ﻿using Gates.Nodes;
-using System.Collections;
 using UnityEngine;
 
 namespace Gates
@@ -23,9 +22,8 @@ namespace Gates
         }
         private void OnDestroy()
         {
-            foreach (var i in _inputIndicators)
+            foreach (Node i in _inputIndicators)
             {
-                //if (i.connectedWire == null) continue;
                 i?.connectedWire?.RemoveWire();
             }
             _outputIndicator?.connectedWire?.RemoveWire();

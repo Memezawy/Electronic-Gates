@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wire: {fileID: 7891185177530753293, guid: dd82978f6c1e3e148a84b0b067958f7b, type: 3}
+  wireAnchor: {fileID: 451694171043341553, guid: 83555f419e91e3f4db48b0d40180a874, type: 3}
   notGate: {fileID: 3034937600673870358, guid: 4a226c51abb62c24b8021143c9b9febe, type: 3}
   andGate: {fileID: 5175049774997246971, guid: e11493207b4b6b64f90015588ca5c6ce, type: 3}
   orGate: {fileID: 606284425299061519, guid: 3454a7bf8f694884993b4f7d2aa4021b, type: 3}

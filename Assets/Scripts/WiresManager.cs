@@ -5,6 +5,18 @@ using UnityEngine;
 
 public class WiresManager : MonoBehaviour
 {
+    public static WiresManager instance { get; private set; }
+
+    public Color onColor;
+    public Color offColor;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+    }
     public static event Action RemoveWiresEvent;
 
     private void Update()
@@ -19,4 +31,6 @@ public class WiresManager : MonoBehaviour
     {
         RemoveWiresEvent?.Invoke();
     }
+
+
 }
