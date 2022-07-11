@@ -5,24 +5,31 @@ using UnityEngine;
 public class WireAnchor : MonoBehaviour
 {
     public int _anchorIndex;
-    private Wire _connectedWire;
+    private Wire _inWire;
+    private Wire _outWire;
 
     private void Update()
     {
-        transform.position = _connectedWire.GetAnchorPositionAt(_anchorIndex);
+        transform.position = _inWire.GetAnchorPositionAt(_anchorIndex);
+        _outWire?.Setstate(_inWire.Getstate());
     }
 
     public void init(int index, Wire wire)
     {
         _anchorIndex = index;
-        _connectedWire = wire;
+        _inWire = wire;
     }
 
     private void OnMouseOver()
     {
-        if (Input.GetMouseButtonUp(1))
+        if (Input.touchCount <= 0)
+            return;
+        
+        // TODO: Remove anchor
+
+        if (Input.GetTouch(0).phase == TouchPhase.Began)
         {
-            RemoveAnchor();
+            MakeWire();
         }
     }
     private void OnMouseDrag()
@@ -31,12 +38,19 @@ public class WireAnchor : MonoBehaviour
     }
     private void RemoveAnchor()
     {
-        _connectedWire.RemoveWireAnchorAt(this);
+        _inWire.RemoveWireAnchorAt(this);
+        _outWire.RemoveWire();
         Destroy(gameObject);
     }
     public void UpdateWireAnchor(Vector3 pos)
     {
         transform.position = pos;
-        _connectedWire.MoveAnchorAt(_anchorIndex, transform.position);
+        _inWire.MoveAnchorAt(_anchorIndex, transform.position);
+    }
+    private void MakeWire()
+    {
+        Wire wire = Instantiate(GameAssets.i.wire, transform.position, Quaternion.identity, _inWire.transform).GetComponent<Wire>();
+        wire.Instantiate(transform, _inWire.Getstate());
+        _outWire = wire;
     }
 }

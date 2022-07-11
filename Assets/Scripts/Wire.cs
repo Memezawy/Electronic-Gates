@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class Wire : MonoBehaviour
 {
+    [SerializeField]
+    private bool _enableCollider;
     private bool state;
     private LineRenderer _lineRenderer;
     private EdgeCollider2D _edgeColider;
@@ -12,6 +14,7 @@ public class Wire : MonoBehaviour
 
     private List<WireAnchor> _wireAnchors = new List<WireAnchor>();
     public bool Connected { get; private set; }
+    
     private void Awake()
     {
         _lineRenderer = GetComponent<LineRenderer>();
@@ -22,21 +25,24 @@ public class Wire : MonoBehaviour
     void Update()
     {
         KeepFollowingTheMouse();
-        if (Input.GetMouseButtonUp(0) && !Connected)
+        // if there's no fingers on the screen just fuck off.
+        if (Input.touches.Length <= 0)
+        {
+            return;
+        }
+        else if (Input.GetTouch(0).phase == TouchPhase.Ended && !Connected)
         {
             AddAnchorPoint(GetAnchorPoint());
         }
-        if (Input.GetMouseButtonDown(1) && !Connected)
+        else if (Input.GetTouch(0).phase == TouchPhase.Ended && !Connected)
         {
-            RemoveWire();
+            // add an anchor at the tip of the line
+            AddAnchorPoint(_lineRenderer.GetPosition(_lineRenderer.positionCount - 1));
         }
 
         UpdateEdgeColider();
     }
-    public bool Getstate()
-    {
-        return state;
-    }
+    public bool Getstate() => state;
 
     public void Setstate(bool value)
     {
@@ -58,6 +64,32 @@ public class Wire : MonoBehaviour
         // if not hovering over a node it will Follow The cursor.
         _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, GetAnchorPoint());
     }
+    private Vector2 GetAnchorPoint()
+    {
+        GameObject _mouseHoverObject = MouseManager.instance.HoverOverGameObject();
+        // if there's nothing the mouse is hovering over follow the mouse
+        if (!_mouseHoverObject)
+        {
+            Vector3 pos = Input.GetTouch(0).position;
+            pos.z = 10;
+            return Camera.main.ScreenToWorldPoint(pos);
+        }
+
+        if (_mouseHoverObject.CompareTag("InputNode"))
+        {
+            ConnectWireTo(_mouseHoverObject);
+            return _mouseHoverObject.transform.position;
+        }
+        return MouseManager.instance.GetPosition();
+    }
+
+    private void ConnectWireTo(GameObject _gameObject)
+    {
+        _gameObject.GetComponent<Node>()?.ConnectWire(this);
+        _endNode = _gameObject.transform;
+        Connected = true;
+    }
+
     private void AddAnchorPoint(Vector3 point)
     {
         // Increases by 1 so there's a point to Follow the mouse.
@@ -66,41 +98,26 @@ public class Wire : MonoBehaviour
 
         // Instantiates the Point
         if (_lineRenderer.positionCount <= 2) return;
-        InstantateAnchorPoint(point, _lineRenderer.positionCount - 2); // ?
+        var wireAnchor = InstantateAnchorPoint(point, _lineRenderer.positionCount - 2); // ?
+        ConnectWireTo(wireAnchor);
     }
 
-    private void InstantateAnchorPoint(Vector3 point, int index)
+    private GameObject InstantateAnchorPoint(Vector3 point, int index)
     {
         var _anchorPoint = Instantiate(GameAssets.i.wireAnchor, point, Quaternion.identity, transform).GetComponent<WireAnchor>();
         _anchorPoint.init(index, this);
         _wireAnchors.Add(_anchorPoint);
+        return _anchorPoint.gameObject;
     }
 
-    private Vector2 GetAnchorPoint()
-    {
-        GameObject _mouseHoverObject = MouseManager.instance.HoverOverGameObject();
-        // if not hovering Just anchor at the mouse position.
-        if (!_mouseHoverObject)
-        {
-            return MouseManager.instance.GetPosition();
-        }
-
-        if (_mouseHoverObject.CompareTag("InputNode"))
-        {
-            _mouseHoverObject.GetComponent<Node>().ConnectWire(this);
-            _endNode = _mouseHoverObject.transform;
-            Connected = true;
-            return _mouseHoverObject.transform.position;
-        }
-        return MouseManager.instance.GetPosition();
-    }
 
     public void Instantiate(Transform startPos, bool _state)
     {
         Setstate(_state);
         _startNode = startPos;
-        _lineRenderer.positionCount = 1;
+        _lineRenderer.positionCount = 2;
         _lineRenderer.SetPosition(0, startPos.position);
+        KeepFollowingTheMouse();
     }
     public void RemoveWire()
     {
@@ -114,13 +131,6 @@ public class Wire : MonoBehaviour
             WiresManager.instance.onColor : WiresManager.instance.offColor;
     }
 
-    private void OnMouseOver()
-    {
-        if (Input.GetMouseButtonUp(2))
-        {
-            RemoveWire();
-        }
-    }
     private void OnDisable()
     {
         WiresManager.RemoveWiresEvent -= RemoveWire;
@@ -128,8 +138,10 @@ public class Wire : MonoBehaviour
 
     private void UpdateEdgeColider()
     {
-        _edgeColider.enabled = Connected;
+        if (!_enableCollider)
+            return;
 
+        _edgeColider.enabled = Connected;
         var offX = -_lineRenderer.GetPosition(0).x;
         var offY = -_lineRenderer.GetPosition(0).y;
         var points = new Vector2[_lineRenderer.positionCount];

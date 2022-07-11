@@ -14,7 +14,7 @@ namespace Gates.Nodes
         public static Color OffColor = Color.red;
 
 
-        //[HideInInspector]
+        [HideInInspector]
         public Wire connectedWire; // Has to Do with Normal Nodes.
 
         internal virtual void Awake()

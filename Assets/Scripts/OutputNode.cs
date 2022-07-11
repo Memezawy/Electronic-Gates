@@ -28,7 +28,7 @@ namespace Gates.Nodes
 
         internal override void OnMouseOver()
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetTouch(0).phase == TouchPhase.Began)
             {
                 Wire wire = Instantiate(GameAssets.i.wire, transform.position, Quaternion.identity, transform).GetComponent<Wire>();
                 wire.Instantiate(transform, state);
@@ -36,6 +36,7 @@ namespace Gates.Nodes
             }
             if (Input.GetMouseButtonDown(1))
             {
+                // Removes all out wires then clears the list.
                 foreach (var w in _wires)
                 {
                     if (w == null) continue;
